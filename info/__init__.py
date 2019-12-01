@@ -1,17 +1,29 @@
+from _codecs import decode
+
 import redis
 from flask import Flask
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
-from item.config import Config
-from item.config import config
+from config import Config
+from config import config
 import logging
 from logging.handlers import RotatingFileHandler
-
-
-
+from info.modules.index import index_blu
+from info.modules.passport import passport_blu
+redis_store = redis.StrictRedis(host=config["development"].REDIS_HOST, port=config["development"].REDIS_PORT,decode_responses = True)
 db = SQLAlchemy()
-redis_store = None
+
+
+from flask_wtf.csrf import generate_csrf
+
+
+
+
+
+
+
+
 def create_app(config_name):
     """通过传入不同的配置名字，初始化其对应配置的应用实例"""
     app = Flask(__name__)
@@ -23,17 +35,27 @@ def create_app(config_name):
     db.init_app(app)
 
     # 初始化radis
-    global redis_store
-    redis_store = redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
+    # global redis_store
+    # redis_store = redis.StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
 
     # 初始化csrf
-    CSRFProtect(app)
+    # CSRFProtect(app)
+    # 导入生成 csrf_token 值的函数
+    # 调用函数生成 csrf_token
+    # csrf_token = generate_csrf()
 
     # 初始化session
     Session(app)
     # 配置日志
     setup_log(config_name)
 
+
+    # 注册蓝图
+    app.register_blueprint(index_blu)
+    app.register_blueprint(passport_blu)
+
+    from info.modules.news import news_blu
+    app.register_blueprint(news_blu)
     return app
 
 
