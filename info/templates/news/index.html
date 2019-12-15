@@ -20,5 +20,19 @@
 
 {% block contentBlock %}
 <ul class="list_con fl">
+    {% for dict in data.news_dict_li %}
+    <li>
+        <a href="#" class="news_pic fl"><img src="{{ dict.index_image_url }}"></a>
+        <a href="#" class="news_title fl">{{ dict.title}}</a>
+        <a href="#" class="news_detail fl">{{ dict.digest }}</a>
+        <div class="author_info fl">
+            <div class="author fl">
+                <img src="../../static/news/images/person.png" alt="author">
+                <a href="#">{{ dict.source }}</a>
+            </div>
+            <div class="time fl">{{ dict.create_time }}</div>
+        </div>
+    </li>
+    {% endfor %}
 </ul>
 {% endblock %}

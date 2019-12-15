@@ -11,6 +11,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 from info.modules.index import index_blu
 from info.modules.passport import passport_blu
+
+
 redis_store = redis.StrictRedis(host=config["development"].REDIS_HOST, port=config["development"].REDIS_PORT,decode_responses = True)
 db = SQLAlchemy()
 
@@ -56,6 +58,10 @@ def create_app(config_name):
 
     from info.modules.news import news_blu
     app.register_blueprint(news_blu)
+
+    from info.modules.profile import profile_blu
+    app.register_blueprint(profile_blu)
+
     return app
 
 
