@@ -34,6 +34,7 @@ def new_list():
         filters.append(News.category_id == cid)
 
     # 3. 查询数据
+
     try:
         paginate = News.query.filter(*filters).order_by(News.create_time.desc()).paginate(page, per_page, False)
     except Exception as e:
